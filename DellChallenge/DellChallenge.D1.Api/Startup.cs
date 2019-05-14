@@ -1,10 +1,12 @@
-﻿using DellChallenge.D1.Api.Dal;
+﻿using DellChallenge.D1.Api.Config;
+using DellChallenge.D1.Api.Dal;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace DellChallenge.D1.Api
@@ -43,7 +45,7 @@ namespace DellChallenge.D1.Api
             });
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseSwagger();
 
@@ -56,6 +58,8 @@ namespace DellChallenge.D1.Api
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Products API V1");
             });
+
+            app.ConfigureExceptionHandler(loggerFactory.CreateLogger("GlobalExceptionHandler"));
 
             app.UseMvc();
             app.UseCors();

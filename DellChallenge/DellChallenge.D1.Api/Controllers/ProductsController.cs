@@ -26,29 +26,45 @@ namespace DellChallenge.D1.Api.Controllers
 
         [HttpGet("{id}")]
         [EnableCors("AllowReactCors")]
-        public ActionResult<string> Get(int id)
+        public ActionResult<string> Get(string id)
         {
-            return "value";
+            if (id?.Length == 0) return BadRequest();
+
+            var product = _productsService.Get(id);
+            if (product == null) return NotFound();
+            return Ok(product);
         }
 
         [HttpPost]
         [EnableCors("AllowReactCors")]
         public ActionResult<ProductDto> Post([FromBody] NewProductDto newProduct)
         {
+            if (!ModelState.IsValid) BadRequest(ModelState);
             var addedProduct = _productsService.Add(newProduct);
             return Ok(addedProduct);
         }
 
         [HttpDelete("{id}")]
         [EnableCors("AllowReactCors")]
-        public void Delete(int id)
+        public ActionResult<ProductDto> Delete(string id)
         {
+            if (id?.Length == 0) return BadRequest();
+            
+            var prod2Rem = _productsService.Delete(id);
+            if (prod2Rem == null) return NotFound();
+            return Ok(prod2Rem);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         [EnableCors("AllowReactCors")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult<ProductDto> Put([FromBody] ProductDto product)
         {
+            if (product.Id?.Length == 0) return BadRequest();
+
+            if (!ModelState.IsValid) BadRequest(ModelState);
+            var prod2Upd = _productsService.Update(product);
+            if (prod2Upd == null) return NotFound();
+            return Ok(prod2Upd);
         }
     }
 }

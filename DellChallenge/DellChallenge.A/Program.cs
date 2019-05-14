@@ -9,6 +9,10 @@ namespace DellChallenge.A
             // State and explain console output order.
             new B();
             Console.ReadKey();
+
+            //when B class instance is created the base class A constructor is called so: "A.A()", 
+            //then B class constructor is called so: "B.B()" from Console.WriteLine then "A .Age" from the 
+            //assignement property setter of Age 
         }
     }
 

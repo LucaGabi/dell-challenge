@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import Validation from "../validation";
 
-class NewProduct extends Component {
+class UpdProduct extends Component {
   constructor() {
     super();
-    alert(1)
+    
     this.state = {
       Name: "",
       Category: "",
@@ -101,4 +101,4 @@ class NewProduct extends Component {
   }
 }
 
-export default NewProduct;
+export default UpdProduct;

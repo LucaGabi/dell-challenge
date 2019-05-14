@@ -5,8 +5,10 @@ namespace DellChallenge.D1.Api.Dal
 {
     public interface IProductsService
     {
-        IEnumerable<ProductDto> GetAll();
         ProductDto Add(NewProductDto newProduct);
+        ProductDto Get(string id);
+        IEnumerable<ProductDto> GetAll();
+        ProductDto Update(ProductDto product);
         ProductDto Delete(string id);
     }
 }

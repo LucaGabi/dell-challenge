@@ -1,6 +1,7 @@
 ﻿using DellChallenge.D2.Web.Models;
 using DellChallenge.D2.Web.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace DellChallenge.D2.Web.Controllers
 {
@@ -29,8 +30,51 @@ namespace DellChallenge.D2.Web.Controllers
         [HttpPost]
         public IActionResult Add(NewProductModel newProduct)
         {
-            _productService.Add(newProduct);
+            if (ModelState.IsValid)
+            {
+                _productService.Add(newProduct);
+                return RedirectToAction("Index");
+            }
+
+            return View(newProduct);
+
+        }
+
+        [HttpGet]
+        public IActionResult Update(string id)
+        {
+            if (id?.Length == 0) return BadRequest();
+
+            var product = _productService.Get(id);
+
+            if (product == null)
+            {
+                TempData["error"] = "Unable to find requested data...";
+                return RedirectToAction("Index");
+            }
+
+            return View(product);
+        }
+
+        [HttpPost]
+        public IActionResult Update(ProductModel product)
+        {
+            if (ModelState.IsValid)
+            {
+                _productService.Update(product);
+                return RedirectToAction("Index");
+            }
+            return View(product);
+        }
+
+        [HttpGet]
+        public IActionResult Delete(string id)
+        {
+            if (id?.Length == 0) return BadRequest();
+
+            _productService.Delete(id);
             return RedirectToAction("Index");
         }
+
     }
 }

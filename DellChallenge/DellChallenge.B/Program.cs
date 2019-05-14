@@ -16,32 +16,57 @@ namespace DellChallenge.B
     {
         void Eat();
         void Drink();
+
+    }
+
+    public interface IFlySpecies : ISpecies
+    {
         void Fly();
+    }
+
+    public interface ISwimSpecies : ISpecies
+    {
         void Swim();
     }
 
-    public class Species
+
+    public abstract class Species : ISpecies
     {
+        private readonly string name = "Unknown";
+
+        public Species(string name)
+        {
+            this.name = name;
+        }
+
+        public abstract void Drink();
+        public abstract void Eat();
+
         public virtual void GetSpecies()
         {
-            Console.WriteLine($"Echo who am I?");
+            Console.WriteLine($"I'm a / an {name}!");
         }
     }
 
-    public class Human : ISpecies
+    public class Human : Species, IFlySpecies, ISwimSpecies
     {
-        public void Drink()
+        public Human(string name) : base("Human")
+        {
+        }
+
+        public override void Drink()
         {
             throw new NotImplementedException();
         }
 
-        public void Eat()
+        public override void Eat()
         {
             throw new NotImplementedException();
         }
 
         public void Fly()
         {
+            //by plain :)
             throw new NotImplementedException();
         }
 
@@ -51,12 +76,48 @@ namespace DellChallenge.B
         }
     }
 
-    public class Bird
+    public class Bird : Species, IFlySpecies
     {
+        public Bird() : base("Bird")
+        {
+        }
+
+        public override void Drink()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Eat()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Fly()
+        {
+            throw new NotImplementedException();
+        }
     }
 
-    public class Fish
+    public class Fish : Species, ISwimSpecies
     {
+        public Fish(string name) : base("Fish")
+        {
+        }
+
+        public override void Drink()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Eat()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Swim()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 
