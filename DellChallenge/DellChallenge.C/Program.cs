@@ -10,11 +10,11 @@ namespace DellChallenge.C
             //      1. clean coding
             //      2. naming standards
             //      3. code reusability, hence maintainability
-            startHere();
+            computeSum();
             Console.ReadKey();
         }
 
-        private static void startHere()
+        private static void computeSum()
         {
             SumServiceProvider sumService = new SumServiceProvider();
             int sumSimple = sumService.Do(1, 3);
