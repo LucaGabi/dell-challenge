@@ -14,6 +14,12 @@ namespace DellChallenge.D1.Api.Dal
             _context = context;
         }
 
+        public ProductDto Get(string id)
+        {
+            var dbProd = _context.Products.FirstOrDefault(x => x.Id == id);
+            return MapToDto(dbProd);
+        }
+
         public IEnumerable<ProductDto> GetAll()
         {
             return _context.Products.Select(p => MapToDto(p));
@@ -47,6 +53,8 @@ namespace DellChallenge.D1.Api.Dal
 
         private Product MapToData(NewProductDto newProduct, string id=null)
         {
+            if (newProduct == null) return null;
+
             return new Product
             {
                 Id=id,
@@ -57,6 +65,8 @@ namespace DellChallenge.D1.Api.Dal
 
         private ProductDto MapToDto(Product product)
         {
+            if (product == null) return null;
+            
             return new ProductDto
             {
                 Id = product.Id,
@@ -65,11 +75,5 @@ namespace DellChallenge.D1.Api.Dal
             };
         }
 
-        public ProductDto Get(string id)
-        {
-            var dbProd = _context.Products.FirstOrDefault(x => x.Id == id);
-            if (dbProd == null) return null;
-            return MapToDto(dbProd);
-        }
     }
 }
