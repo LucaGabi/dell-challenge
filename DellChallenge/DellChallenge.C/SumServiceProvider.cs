@@ -7,14 +7,14 @@ namespace DellChallenge.C
     public class SumServiceProvider
     {
 
-        public int Do(int a, int b)
+        public int Add(int a, int b)
         {
             return a + b;
         }
 
-        public int DoExtended(int a, int b, int c)
+        public int AddExtended(int a, int b, int c)
         {
-            return Do(a, b) + c;
+            return Add(a, b) + c;
         }
     }
 }
