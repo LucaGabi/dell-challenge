@@ -43,7 +43,7 @@ namespace DellChallenge.D2.Web.Controllers
         [HttpGet]
         public IActionResult Update(string id)
         {
-            if (id?.Length == 0) return BadRequest();
+            if (id==null || id?.Length == 0) return BadRequest();
 
             var product = _productService.Get(id);
 
@@ -70,7 +70,7 @@ namespace DellChallenge.D2.Web.Controllers
         [HttpGet]
         public IActionResult Delete(string id)
         {
-            if (id?.Length == 0) return BadRequest();
+            if (id==null || id?.Length == 0) return BadRequest();
 
             _productService.Delete(id);
             return RedirectToAction("Index");
