@@ -28,7 +28,7 @@ namespace DellChallenge.D1.Api.Controllers
         [EnableCors("AllowReactCors")]
         public ActionResult<string> Get(string id)
         {
-            if (id?.Length == 0) return BadRequest();
+            if (id == null || id?.Length == 0) return BadRequest();
 
             var product = _productsService.Get(id);
             if (product == null) return NotFound();
@@ -48,8 +48,8 @@ namespace DellChallenge.D1.Api.Controllers
         [EnableCors("AllowReactCors")]
         public ActionResult<ProductDto> Delete(string id)
         {
-            if (id?.Length == 0) return BadRequest();
-            
+            if (id == null || id?.Length == 0) return BadRequest();
+
             var prod2Rem = _productsService.Delete(id);
             if (prod2Rem == null) return NotFound();
             return Ok(prod2Rem);
@@ -59,7 +59,7 @@ namespace DellChallenge.D1.Api.Controllers
         [EnableCors("AllowReactCors")]
         public ActionResult<ProductDto> Put([FromBody] ProductDto product)
         {
-            if (product.Id?.Length == 0) return BadRequest();
+            if (product.Id == null || product.Id?.Length == 0) return BadRequest();
 
             if (!ModelState.IsValid) BadRequest(ModelState);
             var prod2Upd = _productsService.Update(product);
