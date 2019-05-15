@@ -28,6 +28,7 @@ namespace DellChallenge.D2.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Add(NewProductModel newProduct)
         {
             if (ModelState.IsValid)
