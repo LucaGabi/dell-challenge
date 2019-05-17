@@ -24,26 +24,27 @@ namespace DellChallenge.D1.Api.Controllers
             return Ok(_productsService.GetAll());
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         [EnableCors("AllowReactCors")]
-        public ActionResult<ProductDto> Get(string id)
+        public ActionResult<string> Get(string id)
         {
             if (id == null || id?.Length == 0) return BadRequest();
 
             var product = _productsService.Get(id);
             if (product == null) return NotFound();
-            return product;
+            return Ok(product);
         }
 
         [HttpPost]
         [EnableCors("AllowReactCors")]
-        public ActionResult<ProductDto> Post(NewProductDto newProduct)
+        public ActionResult<ProductDto> Post([FromBody] NewProductDto newProduct)
         {
+            if (!ModelState.IsValid) BadRequest(ModelState);
             var addedProduct = _productsService.Add(newProduct);
-            return addedProduct;
+            return Ok(addedProduct);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [EnableCors("AllowReactCors")]
         public ActionResult<ProductDto> Delete(string id)
         {
@@ -51,16 +52,19 @@ namespace DellChallenge.D1.Api.Controllers
 
             var prod2Rem = _productsService.Delete(id);
             if (prod2Rem == null) return NotFound();
-            return prod2Rem;
+            return Ok(prod2Rem);
         }
 
         [HttpPut]
         [EnableCors("AllowReactCors")]
-        public ActionResult<ProductDto> Put(ProductDto product)
+        public ActionResult<ProductDto> Put([FromBody] ProductDto product)
         {
+            if (product.Id == null || product.Id?.Length == 0) return BadRequest();
+
+            if (!ModelState.IsValid) BadRequest(ModelState);
             var prod2Upd = _productsService.Update(product);
             if (prod2Upd == null) return NotFound();
-            return prod2Upd;
+            return Ok(prod2Upd);
         }
     }
 }
