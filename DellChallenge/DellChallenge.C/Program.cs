@@ -16,7 +16,7 @@ namespace DellChallenge.C
 
         private static void computeSum()
         {
-            SumServiceProvider sumService = new SumServiceProvider();
+            SumService sumService = new SumService();
             int sumSimple = sumService.Add(1, 3);
             int sumExtended = sumService.AddExtended(1, 3, 5);
             Console.WriteLine(sumSimple);

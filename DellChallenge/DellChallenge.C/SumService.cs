@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DellChallenge.C
 {
-    public class SumServiceProvider
+    public class SumService
     {
 
         public int Add(int a, int b)
