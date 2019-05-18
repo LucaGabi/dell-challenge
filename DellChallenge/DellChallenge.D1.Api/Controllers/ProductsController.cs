@@ -8,6 +8,7 @@ namespace DellChallenge.D1.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowReactCors")]
     public class ProductsController : ControllerBase
     {
         private readonly IProductsService _productsService;
@@ -18,14 +19,12 @@ namespace DellChallenge.D1.Api.Controllers
         }
 
         [HttpGet]
-        [EnableCors("AllowReactCors")]
         public ActionResult<IEnumerable<ProductDto>> Get()
         {
             return Ok(_productsService.GetAll());
         }
 
         [HttpGet("{id}")]
-        [EnableCors("AllowReactCors")]
         public ActionResult<ProductDto> Get(string id)
         {
             if (id == null || id?.Length == 0) return BadRequest();
@@ -36,7 +35,6 @@ namespace DellChallenge.D1.Api.Controllers
         }
 
         [HttpPost]
-        [EnableCors("AllowReactCors")]
         public ActionResult<ProductDto> Post(NewProductDto newProduct)
         {
             var addedProduct = _productsService.Add(newProduct);
@@ -44,7 +42,6 @@ namespace DellChallenge.D1.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        [EnableCors("AllowReactCors")]
         public ActionResult<ProductDto> Delete(string id)
         {
             if (id == null || id?.Length == 0) return BadRequest();
@@ -55,7 +52,6 @@ namespace DellChallenge.D1.Api.Controllers
         }
 
         [HttpPut]
-        [EnableCors("AllowReactCors")]
         public ActionResult<ProductDto> Put(ProductDto product)
         {
             var prod2Upd = _productsService.Update(product);
