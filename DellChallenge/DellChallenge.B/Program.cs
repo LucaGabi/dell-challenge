@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DellChallenge.B
 {
@@ -17,100 +19,127 @@ namespace DellChallenge.B
             };
 
             foreach (var speciesType in species)
-            {
                 speciesType.GetSpecies();
-                Console.WriteLine("I can: ");
-                speciesType.Eat();
-                speciesType.Drink();
-                (speciesType as IFlySpecies)?.Fly();
-                (speciesType as ISwimSpecies)?.Swim();
-            }
 
             Console.ReadKey();
         }
     }
 
-    public interface ISpecies
+    public interface ISpeciesAction
     {
-        void Eat();
-        void Drink();
+        void Do();
+        string GetActionName();
     }
 
-    public interface IFlySpecies : ISpecies
+    public abstract class SpeciesAction : ISpeciesAction
     {
-        void Fly();
+        private readonly string action;
+
+        public SpeciesAction(string action)
+        {
+            this.action = action;
+        }
+
+        public virtual void Do()
+        {
+            Console.WriteLine(action);
+        }
+
+        public string GetActionName()
+        {
+            return action;
+        }
     }
 
-    public interface ISwimSpecies : ISpecies
+    public class DrinkSpeciesAction : SpeciesAction
     {
-        void Swim();
+        public DrinkSpeciesAction() : base("Drink")
+        {
+        }
     }
 
-
-    public abstract class Species : ISpecies
+    public class EatSpeciesAction : SpeciesAction
     {
-        private readonly string name = "Unknown";
+        public EatSpeciesAction() : base("Eat")
+        {
+        }
+    }
 
-        public Species(string name)
+    public class FlySpeciesAction : SpeciesAction
+    {
+        public FlySpeciesAction() : base("Fly")
+        {
+        }
+    }
+
+    public class SwimSpeciesAction : SpeciesAction
+    {
+        public SwimSpeciesAction() : base("Swim")
+        {
+        }
+    }
+
+    public abstract class Species
+    {
+        private readonly string name;
+        private List<ISpeciesAction> speciesActions = new List<ISpeciesAction>();
+
+        public Species(string name, List<ISpeciesAction> speciesActions)
         {
             this.name = name;
-        }
-
-        public virtual void Drink() {
-            Console.WriteLine("Drink");
-        }
-
-        public virtual void Eat()
-        {
-            Console.WriteLine("Eat");
+            this.speciesActions = speciesActions;
         }
 
         public virtual void GetSpecies()
         {
             Console.WriteLine($"I'm a / an {name}!");
+            var actionCSV = string.Join(", ", speciesActions.Select(x => x.GetActionName()));
+            Console.WriteLine($"I can: {actionCSV}");
         }
     }
 
-    public class Human : Species, IFlySpecies, ISwimSpecies
+    public class Human : Species
     {
-        public Human() : base("Human")
+        public Human() :
+            base("Human",
+                new List<ISpeciesAction> {
+                    new DrinkSpeciesAction(),
+                    new EatSpeciesAction(),
+                    new FlySpeciesAction(),
+                    new SwimSpeciesAction(),
+                })
         {
-        }
-
-        public void Fly()
-        {
-            //by plain :)
-            Console.WriteLine("Fly, not native though");
-        }
-
-        public void Swim()
-        {
-            Console.WriteLine("Swim");
+            // ctor body
         }
     }
 
-    public class Bird : Species, IFlySpecies
+    public class Bird : Species
     {
-        public Bird() : base("Bird")
+        public Bird() :
+            base("Bird",
+                new List<ISpeciesAction> {
+                    new DrinkSpeciesAction(),
+                    new EatSpeciesAction(),
+                    new FlySpeciesAction(),
+                })
         {
-        }
-
-        public void Fly()
-        {
-            Console.WriteLine("Fly");
+            // ctor body
         }
     }
 
-    public class Fish : Species, ISwimSpecies
+    public class Fish : Species
     {
-        public Fish() : base("Fish")
+        public Fish() :
+            base("Fish",
+                new List<ISpeciesAction> {
+                    new DrinkSpeciesAction(),
+                    new EatSpeciesAction(),
+                    new SwimSpeciesAction(),
+                })
         {
-        }
-
-        public void Swim()
-        {
-            Console.WriteLine("Swim");
+            // ctor body
         }
     }
+
 }
 
