@@ -7,7 +7,7 @@ namespace DellChallenge.D1.Api.Dal
     {
         ProductDto Add(NewProductDto newProduct);
         ProductDto Get(string id);
-        IEnumerable<ProductDto> GetAll();
+        IEnumerable<ProductDto> GetAll(int? page, int? pageSize,out int totalPages);
         ProductDto Update(ProductDto product);
         ProductDto Delete(string id);
     }

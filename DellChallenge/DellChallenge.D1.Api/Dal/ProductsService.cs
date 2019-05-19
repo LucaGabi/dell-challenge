@@ -20,9 +20,20 @@ namespace DellChallenge.D1.Api.Dal
             return MapToDto(dbProd);
         }
 
-        public IEnumerable<ProductDto> GetAll()
+        public IEnumerable<ProductDto> GetAll(int? page, int? pageSize, out int totalPages)
         {
-            return _context.Products.Select(p => MapToDto(p));
+            var data = _context.Products.AsQueryable();
+
+            if (pageSize.HasValue)
+                totalPages = ((data.Count() - 1) / pageSize.Value) + 1;
+            else
+                totalPages = 0;
+
+            if (page != null && pageSize != null)
+                data = data.Skip((page.Value - 1) * pageSize.Value)
+                           .Take(pageSize.Value);
+
+            return data.Select(p => MapToDto(p));
         }
 
         public ProductDto Add(NewProductDto newProduct)
@@ -36,8 +47,8 @@ namespace DellChallenge.D1.Api.Dal
 
         public ProductDto Update(ProductDto product)
         {
-            var updProduct = MapToData(product,product.Id);
-            _context.Attach(updProduct).State=EntityState.Modified;
+            var updProduct = MapToData(product, product.Id);
+            _context.Attach(updProduct).State = EntityState.Modified;
             _context.SaveChanges();
             return MapToDto(updProduct);
         }
@@ -51,13 +62,13 @@ namespace DellChallenge.D1.Api.Dal
             return MapToDto(dbProd);
         }
 
-        private Product MapToData(NewProductDto newProduct, string id=null)
+        private Product MapToData(NewProductDto newProduct, string id = null)
         {
             if (newProduct == null) return null;
 
             return new Product
             {
-                Id=id,
+                Id = id,
                 Category = newProduct.Category,
                 Name = newProduct.Name
             };
@@ -66,7 +77,7 @@ namespace DellChallenge.D1.Api.Dal
         private ProductDto MapToDto(Product product)
         {
             if (product == null) return null;
-            
+
             return new ProductDto
             {
                 Id = product.Id,

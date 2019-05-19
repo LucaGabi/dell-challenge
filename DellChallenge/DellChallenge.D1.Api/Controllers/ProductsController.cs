@@ -19,9 +19,23 @@ namespace DellChallenge.D1.Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ProductDto>> Get()
+        public ActionResult<IEnumerable<ProductDto>> Get([FromHeader(Name ="Page")] int? page,[FromHeader(Name = "Page-Size")] int? pageSize)
         {
-            return Ok(_productsService.GetAll());
+            if (!(page.HasValue && pageSize.HasValue) && 
+                !(page.HasValue==false==pageSize.HasValue==false))
+                return BadRequest("incompleate pagination header parameters");
+
+            if (page != null && page <= 0) return BadRequest("invalid page number");
+            if (pageSize != null && pageSize <= 0) return BadRequest("invalid page size");
+
+            var responseData = _productsService.GetAll(page, pageSize, out var totalPages);
+
+            if (page > totalPages)
+                return NotFound();
+
+            Response.Headers.Add("Total-Pages", totalPages.ToString());
+
+            return Ok(responseData);
         }
 
         [HttpGet("{id}")]
