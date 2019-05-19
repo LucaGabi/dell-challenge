@@ -1,14 +1,16 @@
 ﻿using DellChallenge.D1.Api.Dto;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DellChallenge.D1.Api.Dal
 {
     public interface IProductsService
     {
-        ProductDto Add(NewProductDto newProduct);
-        ProductDto Get(string id);
-        IEnumerable<ProductDto> GetAll(int? page, int? pageSize,out int totalPages);
-        ProductDto Update(ProductDto product);
-        ProductDto Delete(string id);
+        Task<ProductDto> AddAsync(NewProductDto newProduct, CancellationToken cancellationToken);
+        Task<ProductDto> GetAsync(string id, CancellationToken cancellationToken);
+        Task<(IEnumerable<ProductDto> products, int totalPages)> GetAllAsync(int? page, int? pageSize, CancellationToken cancellationToken);
+        Task<ProductDto> UpdateAsync(ProductDto product, CancellationToken cancellationToken);
+        Task<ProductDto> DeleteAsync(string id, CancellationToken cancellationToken);
     }
 }

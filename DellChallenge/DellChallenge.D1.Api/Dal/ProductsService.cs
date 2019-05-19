@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using DellChallenge.D1.Api.Dto;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,51 +16,53 @@ namespace DellChallenge.D1.Api.Dal
             _context = context;
         }
 
-        public ProductDto Get(string id)
+        public async Task<ProductDto> GetAsync(string id, CancellationToken cancellationToken)
         {
-            var dbProd = _context.Products.FirstOrDefault(x => x.Id == id);
+            var dbProd = await _context.Products.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
             return MapToDto(dbProd);
         }
 
-        public IEnumerable<ProductDto> GetAll(int? page, int? pageSize, out int totalPages)
+        public async Task<(IEnumerable<ProductDto> products, int totalPages)> GetAllAsync(int? page, int? pageSize, CancellationToken cancellationToken)
         {
             var data = _context.Products.AsQueryable();
-
+            var totalPages = 0;
             if (pageSize.HasValue)
                 totalPages = ((data.Count() - 1) / pageSize.Value) + 1;
-            else
-                totalPages = 0;
+
 
             if (page != null && pageSize != null)
                 data = data.Skip((page.Value - 1) * pageSize.Value)
                            .Take(pageSize.Value);
 
-            return data.Select(p => MapToDto(p));
+            if (cancellationToken.IsCancellationRequested)
+                return (null,0);
+
+            return ((await data.ToListAsync(cancellationToken)).Select(p => MapToDto(p)), totalPages);
         }
 
-        public ProductDto Add(NewProductDto newProduct)
+        public async Task<ProductDto> AddAsync(NewProductDto newProduct, CancellationToken cancellationToken)
         {
             var product = MapToData(newProduct);
-            _context.Products.Add(product);
-            _context.SaveChanges();
+            await _context.Products.AddAsync(product,cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             var addedDto = MapToDto(product);
             return addedDto;
         }
 
-        public ProductDto Update(ProductDto product)
+        public async Task<ProductDto> UpdateAsync(ProductDto product, CancellationToken cancellationToken)
         {
             var updProduct = MapToData(product, product.Id);
             _context.Attach(updProduct).State = EntityState.Modified;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync(cancellationToken);
             return MapToDto(updProduct);
         }
 
-        public ProductDto Delete(string id)
+        public async Task<ProductDto> DeleteAsync(string id, CancellationToken cancellationToken)
         {
-            var dbProd = _context.Products.FirstOrDefault(x => x.Id == id);
+            var dbProd = await _context.Products.FirstOrDefaultAsync(x => x.Id == id,cancellationToken);
             if (dbProd == null) return null;
             _context.Products.Remove(dbProd);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync(cancellationToken);
             return MapToDto(dbProd);
         }
 
