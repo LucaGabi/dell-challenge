@@ -84,10 +84,11 @@ namespace DellChallenge.B
         private readonly string name;
         private List<ISpeciesAction> speciesActions = new List<ISpeciesAction>();
 
-        public Species(string name, List<ISpeciesAction> speciesActions)
+        public Species(string name, List<ISpeciesAction> speciesActions=default)
         {
             this.name = name;
-            this.speciesActions = speciesActions;
+            if (speciesActions?.Count>0)
+                this.speciesActions = speciesActions;
         }
 
         public virtual void GetSpecies()
@@ -96,48 +97,41 @@ namespace DellChallenge.B
             var actionCSV = string.Join(", ", speciesActions.Select(x => x.GetActionName()));
             Console.WriteLine($"I can: {actionCSV}");
         }
+
+        protected void AddPosibleAction(ISpeciesAction action)
+        {
+            speciesActions.Add(action);
+        }
     }
 
     public class Human : Species
     {
-        public Human() :
-            base("Human",
-                new List<ISpeciesAction> {
-                    new DrinkSpeciesAction(),
-                    new EatSpeciesAction(),
-                    new FlySpeciesAction(),
-                    new SwimSpeciesAction(),
-                })
+        public Human() : base("Human")
         {
-            // ctor body
+            AddPosibleAction(new DrinkSpeciesAction());
+            AddPosibleAction(new EatSpeciesAction());
+            AddPosibleAction(new FlySpeciesAction());
+            AddPosibleAction(new SwimSpeciesAction());
         }
     }
 
     public class Bird : Species
     {
-        public Bird() :
-            base("Bird",
-                new List<ISpeciesAction> {
-                    new DrinkSpeciesAction(),
-                    new EatSpeciesAction(),
-                    new FlySpeciesAction(),
-                })
+        public Bird() : base("Bird")
         {
-            // ctor body
+            AddPosibleAction(new DrinkSpeciesAction());
+            AddPosibleAction(new EatSpeciesAction());
+            AddPosibleAction(new FlySpeciesAction());
         }
     }
 
     public class Fish : Species
     {
-        public Fish() :
-            base("Fish",
-                new List<ISpeciesAction> {
-                    new DrinkSpeciesAction(),
-                    new EatSpeciesAction(),
-                    new SwimSpeciesAction(),
-                })
+        public Fish() : base("Fish")
         {
-            // ctor body
+            AddPosibleAction(new DrinkSpeciesAction());
+            AddPosibleAction(new EatSpeciesAction());
+            AddPosibleAction(new SwimSpeciesAction());
         }
     }
 
