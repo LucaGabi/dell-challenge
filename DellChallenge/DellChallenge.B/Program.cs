@@ -9,6 +9,24 @@ namespace DellChallenge.B
             // Given the classes and interface below, please constructor the proper hierarchy.
             // Feel free to refactor and restructure the classes/interface below.
             // (Hint: Not all species and Fly and/or Swim)
+
+            var species = new Species[] {
+                new Human(),
+                new Bird(),
+                new Fish()
+            };
+
+            foreach (var speciesType in species)
+            {
+                speciesType.GetSpecies();
+                Console.WriteLine("I can: ");
+                speciesType.Eat();
+                speciesType.Drink();
+                (speciesType as IFlySpecies)?.Fly();
+                (speciesType as ISwimSpecies)?.Swim();
+            }
+
+            Console.ReadKey();
         }
     }
 
@@ -16,7 +34,6 @@ namespace DellChallenge.B
     {
         void Eat();
         void Drink();
-
     }
 
     public interface IFlySpecies : ISpecies
@@ -39,8 +56,14 @@ namespace DellChallenge.B
             this.name = name;
         }
 
-        public abstract void Drink();
-        public abstract void Eat();
+        public virtual void Drink() {
+            Console.WriteLine("Drink");
+        }
+
+        public virtual void Eat()
+        {
+            Console.WriteLine("Eat");
+        }
 
         public virtual void GetSpecies()
         {
@@ -50,29 +73,19 @@ namespace DellChallenge.B
 
     public class Human : Species, IFlySpecies, ISwimSpecies
     {
-        public Human(string name) : base("Human")
+        public Human() : base("Human")
         {
-        }
-
-        public override void Drink()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Eat()
-        {
-            throw new NotImplementedException();
         }
 
         public void Fly()
         {
             //by plain :)
-            throw new NotImplementedException();
+            Console.WriteLine("Fly, not native though");
         }
 
         public void Swim()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Swim");
         }
     }
 
@@ -82,41 +95,21 @@ namespace DellChallenge.B
         {
         }
 
-        public override void Drink()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Eat()
-        {
-            throw new NotImplementedException();
-        }
-
         public void Fly()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Fly");
         }
     }
 
     public class Fish : Species, ISwimSpecies
     {
-        public Fish(string name) : base("Fish")
+        public Fish() : base("Fish")
         {
-        }
-
-        public override void Drink()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Eat()
-        {
-            throw new NotImplementedException();
         }
 
         public void Swim()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Swim");
         }
     }
 }
