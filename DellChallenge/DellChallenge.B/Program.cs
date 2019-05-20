@@ -19,7 +19,10 @@ namespace DellChallenge.B
             };
 
             foreach (var speciesType in species)
+            {
                 speciesType.GetSpecies();
+                speciesType.ActAll();
+            }
 
             Console.ReadKey();
         }
@@ -42,7 +45,7 @@ namespace DellChallenge.B
 
         public virtual void Do()
         {
-            Console.WriteLine(action);
+            Console.WriteLine($"I'm  {action}ing");
         }
 
         public string GetActionName()
@@ -69,6 +72,19 @@ namespace DellChallenge.B
     {
         public FlySpeciesAction() : base("Fly")
         {
+        }
+    }
+
+    public class FlyHumanSpeciesAction : FlySpeciesAction
+    {
+        public FlyHumanSpeciesAction()
+        {
+        }
+
+        public override void Do()
+        {
+            Console.WriteLine("Take a tiket, catch the plain and then ");
+            base.Do();
         }
     }
 
@@ -102,6 +118,17 @@ namespace DellChallenge.B
         {
             speciesActions.Add(action);
         }
+
+        public virtual void Act(ISpeciesAction action)
+        {
+            action.Do();
+        }
+
+        public virtual void ActAll()
+        {
+            foreach (var action in speciesActions)
+                Act(action);
+        }
     }
 
     public class Human : Species
@@ -110,9 +137,9 @@ namespace DellChallenge.B
         {
             AddPosibleAction(new DrinkSpeciesAction());
             AddPosibleAction(new EatSpeciesAction());
-            AddPosibleAction(new FlySpeciesAction());
+            AddPosibleAction(new FlyHumanSpeciesAction());
             AddPosibleAction(new SwimSpeciesAction());
-        }
+        } 
     }
 
     public class Bird : Species
